@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { Suspense } from "react"
 import { OfflineIndicator } from "@/components/offline-indicator"
+import { AuthProvider } from "@/components/auth-provider"
 import "./globals.css"
 
 const inter = Inter({
@@ -65,8 +66,10 @@ export default function RootLayout({
         <link rel="shortcut icon" href="/icon-192.jpg" />
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
-        <OfflineIndicator />
-        <Suspense fallback={null}>{children}</Suspense>
+        <AuthProvider>
+          <OfflineIndicator />
+          <Suspense fallback={null}>{children}</Suspense>
+        </AuthProvider>
         <script
           dangerouslySetInnerHTML={{
             __html: `

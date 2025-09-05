@@ -2,40 +2,38 @@
 
 import type React from "react"
 
-import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Badge } from "@/components/ui/badge"
+import { demoUsers } from "@/lib/auth"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { useAuth } from "@/components/auth-provider"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [showDemo, setShowDemo] = useState(false)
+  const { signIn, loading, error, clearError } = useAuth()
   const router = useRouter()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    const supabase = createClient()
-    setIsLoading(true)
-    setError(null)
+    clearError()
 
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
-      if (error) throw error
+    const result = await signIn(email, password)
+    if (result.success) {
       router.push("/dashboard")
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred")
-    } finally {
-      setIsLoading(false)
     }
+  }
+
+  const fillDemoCredentials = (demoEmail: string, demoPassword: string) => {
+    setEmail(demoEmail)
+    setPassword(demoPassword)
+    setShowDemo(false)
   }
 
   return (
@@ -68,6 +66,44 @@ export default function LoginPage() {
               <CardDescription>Sign in to access your LCA projects and assessments</CardDescription>
             </CardHeader>
             <CardContent>
+              {/* Demo Credentials Section */}
+              <div className="mb-6 p-4 bg-muted/50 rounded-lg border">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-sm font-semibold">Demo Credentials</h3>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowDemo(!showDemo)}
+                  >
+                    {showDemo ? 'Hide' : 'Show'} Demo Accounts
+                  </Button>
+                </div>
+                
+                {showDemo && (
+                  <div className="space-y-2">
+                    {demoUsers.map((user, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-2 bg-background rounded border cursor-pointer hover:bg-accent/50 transition-colors"
+                        onClick={() => fillDemoCredentials(user.email, user.password)}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Badge variant="secondary" className="text-xs">
+                            {user.role}
+                          </Badge>
+                          <span className="text-sm text-muted-foreground">{user.email}</span>
+                        </div>
+                        <span className="text-xs text-muted-foreground">Click to use</span>
+                      </div>
+                    ))}
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Click any demo account to auto-fill credentials
+                    </p>
+                  </div>
+                )}
+              </div>
+
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="email">Email Address</Label>
@@ -97,8 +133,8 @@ export default function LoginPage() {
                     {error}
                   </div>
                 )}
-                <Button type="submit" className="w-full h-11" disabled={isLoading}>
-                  {isLoading ? "Signing in..." : "Sign In"}
+                <Button type="submit" className="w-full h-11" disabled={loading}>
+                  {loading ? "Signing in..." : "Sign In"}
                 </Button>
               </form>
 

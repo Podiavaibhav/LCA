@@ -1,19 +1,33 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { PWAInstallPrompt } from "@/components/pwa-install-prompt"
+import { ProtectedRoute } from "@/components/protected-route"
+import { useAuth } from "@/components/auth-provider"
+import { LogOut, User, Building2 } from "lucide-react"
 
 export default function DashboardPage() {
-  const mockUser = {
-    email: "demo@example.com",
-    created_at: "2024-01-01",
+  return (
+    <ProtectedRoute>
+      <DashboardContent />
+    </ProtectedRoute>
+  )
+}
+
+function DashboardContent() {
+  const { user, signOut } = useAuth()
+
+  const handleSignOut = async () => {
+    await signOut()
+    window.location.href = '/'
   }
 
   const mockProfile = {
-    full_name: "Demo User",
-    role: "engineer",
-    organization: "Demo Organization",
+    full_name: user?.user_metadata?.full_name || user?.email || "Demo User",
+    role: user?.user_metadata?.role || "researcher",
+    organization: user?.user_metadata?.organization || "Demo Organization",
   }
 
   const mockProjects = [
@@ -52,8 +66,14 @@ export default function DashboardPage() {
             </div>
             <div className="flex items-center gap-2 sm:gap-4">
               <div className="text-right hidden sm:block">
-                <p className="text-sm font-medium">{mockProfile?.full_name || mockUser.email}</p>
-                <p className="text-xs text-muted-foreground capitalize">{mockProfile?.role}</p>
+                <p className="text-sm font-medium flex items-center gap-2">
+                  <User className="w-4 h-4" />
+                  {mockProfile?.full_name}
+                </p>
+                <p className="text-xs text-muted-foreground capitalize flex items-center gap-2">
+                  <Building2 className="w-3 h-3" />
+                  {mockProfile?.role} • {mockProfile?.organization}
+                </p>
               </div>
               {isAdmin && (
                 <Button variant="outline" size="sm" asChild className="hidden sm:flex bg-transparent">
@@ -65,11 +85,22 @@ export default function DashboardPage() {
                   <Link href="/admin">🛡️</Link>
                 </Button>
               )}
-              <Button variant="outline" size="sm" className="hidden sm:flex bg-transparent">
-                🚪
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="hidden sm:flex bg-transparent"
+                onClick={handleSignOut}
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Sign Out
               </Button>
-              <Button variant="outline" size="sm" className="sm:hidden bg-transparent">
-                🚪
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="sm:hidden bg-transparent"
+                onClick={handleSignOut}
+              >
+                <LogOut className="w-4 h-4" />
               </Button>
             </div>
           </div>

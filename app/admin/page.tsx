@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation"
-import { createClient } from "@/lib/supabase/server"
+"use client"
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -9,73 +9,64 @@ import { AdminUsersSection } from "@/components/admin-users-section"
 import { AdminProjectsSection } from "@/components/admin-projects-section"
 import { AdminReportsSection } from "@/components/admin-reports-section"
 import { AdminLogsSection } from "@/components/admin-logs-section"
+import { ProtectedRoute } from "@/components/protected-route"
+import { useAuth } from "@/components/auth-provider"
 
-export default async function AdminPage() {
-  // For static export, we'll handle auth client-side instead
-  // const supabase = await createClient()
+export default function AdminPage() {
+  return (
+    <ProtectedRoute requireAuth={true} requiredRole="admin">
+      <AdminContent />
+    </ProtectedRoute>
+  )
+}
 
-  // const { data, error } = await supabase.auth.getUser()
-  // if (error || !data?.user) {
-  //   redirect("/auth/login")
-  // }
+function AdminContent() {
+  const { user } = useAuth()
 
-  // Check if user has admin/auditor role
-  // const { data: profile } = await supabase.from("profiles").select("*").eq("id", data.user.id).single()
-
-  // if (!profile || !["admin", "auditor"].includes(profile.role)) {
-  //   redirect("/dashboard")
-  // }
-
-  // Get system statistics - will be handled client-side for static export
-  // const [{ count: totalUsers }, { count: totalProjects }, { count: totalReports }, { count: totalUploads }] =
-  //   await Promise.all([
-  //     supabase.from("profiles").select("*", { count: "exact", head: true }),
-  //     supabase.from("projects").select("*", { count: "exact", head: true }),
-  //     supabase.from("reports").select("*", { count: "exact", head: true }),
-  //     supabase.from("data_uploads").select("*", { count: "exact", head: true }),
-  //   ])
-
-  // Get recent activity
-  // const { data: recentProjects } = await supabase
-  //   .from("projects")
-  //   .select("*, profiles(full_name)")
-  //   .order("created_at", { ascending: false })
-  //   .limit(5)
-
-  // const { data: recentReports } = await supabase
-  //   .from("reports")
-  //   .select("*, projects(name)")
-  //   .order("created_at", { ascending: false })
-  //   .limit(5)
-
-  // Get users by role
-  // const { data: usersByRole } = await supabase.from("profiles").select("role")
-
-  // Mock data for static export
-  const totalUsers = 0
-  const totalProjects = 0
-  const totalReports = 0
-  const totalUploads = 0
-  const recentProjects: any[] = []
-  const recentReports: any[] = []
+  // Mock data for static export - in production this would come from Supabase
+  const totalUsers = 25
+  const totalProjects = 42
+  const totalReports = 67
+  const totalUploads = 134
+  const recentProjects: any[] = [
+    { 
+      id: 1, 
+      name: "Steel Production LCA", 
+      profiles: { full_name: "John Doe" }, 
+      created_at: "2024-01-15" 
+    },
+    { 
+      id: 2, 
+      name: "Aluminum Recycling", 
+      profiles: { full_name: "Jane Smith" }, 
+      created_at: "2024-01-14" 
+    }
+  ]
+  const recentReports: any[] = [
+    { 
+      id: 1, 
+      projects: { name: "Steel Production LCA" }, 
+      created_at: "2024-01-15" 
+    }
+  ]
 
   const roleStats = {
-    admin: 0,
-    auditor: 0,
-    researcher: 0
+    admin: 2,
+    auditor: 3,
+    researcher: 20
   }
 
-  // Mock data for static export
+  // Mock user data
   const data = {
-    user: {
+    user: user || {
       email: "admin@example.com",
       id: "mock-user-id"
     }
   }
 
   const profile = {
-    full_name: "Admin User",
-    role: "admin"
+    full_name: user?.user_metadata?.full_name || "Admin User",
+    role: user?.user_metadata?.role || "admin"
   }
 
   return (
