@@ -1,0 +1,169 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Hide any v0 attribution */
+[id*="v0-built-with-button"],
+[id*="v0-built-with"],
+[data-v0], [class*="v0"], [id*="v0"], 
+button[class*="built"], div[class*="built"],
+*[class*="attribution"], *[data-attribution],
+*[class*="v0-built"], *[data-v0-built],
+iframe[src*="v0"], script[src*="v0"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  left: -9999px !important;
+  width: 0 !important;
+  height: 0 !important;
+  z-index: -9999 !important;
+}
+
+/* Target the specific button pattern from the screenshot */
+div[id^="v0-built-with-button"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  left: -10000px !important;
+  top: -10000px !important;
+  width: 0 !important;
+  height: 0 !important;
+  z-index: -10000 !important;
+  overflow: hidden !important;
+}
+
+/* Target specific button text */
+button:has-text("built with v0"), 
+button:has-text("Built with v0"),
+button:has-text("powered by v0"),
+button:has-text("Powered by v0"),
+*:contains("built with v0"),
+*:contains("Built with v0") {
+  display: none !important;
+}
+
+:root {
+  /* Updated color scheme for government-grade sustainability theme */
+  --background: oklch(0.99 0.005 120);
+  --foreground: oklch(0.15 0.02 180);
+  --card: oklch(0.98 0.01 120);
+  --card-foreground: oklch(0.15 0.02 180);
+  --popover: oklch(0.98 0.01 120);
+  --popover-foreground: oklch(0.15 0.02 180);
+  --primary: oklch(0.35 0.12 160); /* Deep teal-green for sustainability */
+  --primary-foreground: oklch(0.98 0.01 120);
+  --secondary: oklch(0.25 0.08 220); /* Deep blue for trust/government */
+  --secondary-foreground: oklch(0.98 0.01 120);
+  --muted: oklch(0.94 0.02 140);
+  --muted-foreground: oklch(0.45 0.04 160);
+  --accent: oklch(0.42 0.15 140); /* Sustainable green accent */
+  --accent-foreground: oklch(0.98 0.01 120);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.98 0.01 120);
+  --border: oklch(0.88 0.02 140);
+  --input: oklch(0.92 0.02 140);
+  --ring: oklch(0.35 0.12 160);
+  --chart-1: oklch(0.35 0.12 160);
+  --chart-2: oklch(0.25 0.08 220);
+  --chart-3: oklch(0.42 0.15 140);
+  --chart-4: oklch(0.3 0.1 200);
+  --chart-5: oklch(0.4 0.14 180);
+  --radius: 0.375rem;
+  --sidebar: oklch(0.96 0.01 140);
+  --sidebar-foreground: oklch(0.15 0.02 180);
+  --sidebar-primary: oklch(0.35 0.12 160);
+  --sidebar-primary-foreground: oklch(0.98 0.01 120);
+  --sidebar-accent: oklch(0.94 0.02 140);
+  --sidebar-accent-foreground: oklch(0.15 0.02 180);
+  --sidebar-border: oklch(0.88 0.02 140);
+  --sidebar-ring: oklch(0.35 0.12 160);
+}
+
+.dark {
+  --background: oklch(0.08 0.01 180);
+  --foreground: oklch(0.95 0.01 120);
+  --card: oklch(0.1 0.01 180);
+  --card-foreground: oklch(0.95 0.01 120);
+  --popover: oklch(0.1 0.01 180);
+  --popover-foreground: oklch(0.95 0.01 120);
+  --primary: oklch(0.45 0.15 160);
+  --primary-foreground: oklch(0.08 0.01 180);
+  --secondary: oklch(0.35 0.1 220);
+  --secondary-foreground: oklch(0.95 0.01 120);
+  --muted: oklch(0.15 0.02 180);
+  --muted-foreground: oklch(0.65 0.04 160);
+  --accent: oklch(0.52 0.18 140);
+  --accent-foreground: oklch(0.08 0.01 180);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.95 0.01 120);
+  --border: oklch(0.18 0.02 180);
+  --input: oklch(0.18 0.02 180);
+  --ring: oklch(0.45 0.15 160);
+  --chart-1: oklch(0.45 0.15 160);
+  --chart-2: oklch(0.35 0.1 220);
+  --chart-3: oklch(0.52 0.18 140);
+  --chart-4: oklch(0.4 0.12 200);
+  --chart-5: oklch(0.5 0.16 180);
+  --sidebar: oklch(0.12 0.01 180);
+  --sidebar-foreground: oklch(0.95 0.01 120);
+  --sidebar-primary: oklch(0.45 0.15 160);
+  --sidebar-primary-foreground: oklch(0.08 0.01 180);
+  --sidebar-accent: oklch(0.15 0.02 180);
+  --sidebar-accent-foreground: oklch(0.95 0.01 120);
+  --sidebar-border: oklch(0.18 0.02 180);
+  --sidebar-ring: oklch(0.45 0.15 160);
+}
+
+@theme inline {
+  --font-sans: var(--font-inter);
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
