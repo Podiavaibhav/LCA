@@ -7,11 +7,35 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { demoUsers } from "@/lib/auth"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useAuth } from "@/components/auth-provider"
+
+// Demo credentials for easy testing
+const demoUsers = [
+  {
+    email: "admin@lcaplatform.com",
+    password: "admin123",
+    role: "admin",
+    full_name: "Admin User",
+    organization: "LCA Platform"
+  },
+  {
+    email: "auditor@lcaplatform.com", 
+    password: "auditor123",
+    role: "auditor",
+    full_name: "Auditor User",
+    organization: "LCA Platform"
+  },
+  {
+    email: "researcher@university.edu",
+    password: "research123", 
+    role: "researcher",
+    full_name: "Research User",
+    organization: "University Research Lab"
+  }
+]
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
