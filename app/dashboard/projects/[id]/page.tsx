@@ -9,6 +9,18 @@ import { DataUploadSection } from "@/components/data-upload-section"
 import { LCAAnalysisDashboard } from "@/components/lca-analysis-dashboard"
 import { ReportGenerationSection } from "@/components/report-generation-section"
 
+// Generate static params for static export
+export async function generateStaticParams() {
+  // For static export, we'll generate a few sample project IDs
+  // In a real app, you'd fetch this from your database
+  return [
+    { id: '1' },
+    { id: '2' },
+    { id: '3' },
+    { id: 'sample' }
+  ]
+}
+
 interface ProjectPageProps {
   params: Promise<{ id: string }>
 }
