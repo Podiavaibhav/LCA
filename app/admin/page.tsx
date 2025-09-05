@@ -65,6 +65,19 @@ export default async function AdminPage() {
     researcher: 0
   }
 
+  // Mock data for static export
+  const data = {
+    user: {
+      email: "admin@example.com",
+      id: "mock-user-id"
+    }
+  }
+
+  const profile = {
+    full_name: "Admin User",
+    role: "admin"
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
